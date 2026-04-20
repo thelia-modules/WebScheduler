@@ -5,6 +5,17 @@ All notable changes to this module are documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 and this module adheres to [Semantic Versioning](https://semver.org/).
 
+## [1.1.2] — 2026-04-20
+
+### Changed
+- Task form wording: the secret box no longer says "store it safely"
+  (misleading for web-cron use). It now clarifies that the secret is
+  already embedded in the URL's signature and only needs to be saved for
+  external signing integrations.
+- Trigger URL hint: removed the obsolete "new signature at each display"
+  note (URLs are stable since 1.1.0) and added the "leave the password
+  field unchecked" reminder for Infomaniak/OVH panels.
+
 ## [1.1.1] — 2026-04-20
 
 ### Fixed

@@ -46,8 +46,9 @@ return [
 
     // Task form secret / URL
     'Secret is shown only once.' => 'Le secret n\'est affiché qu\'une seule fois.',
-    'Store it safely. Anyone holding this secret can trigger the task.' => 'Conservez-le en sécurité. Toute personne possédant ce secret peut déclencher la tâche.',
-    'Paste this URL in your hosting scheduled-tasks panel (Infomaniak, etc.). Each call generates its own signature at trigger time.' => 'Collez cette URL dans le panneau de tâches planifiées de votre hébergement (Infomaniak, etc.). Une nouvelle signature est générée à chaque affichage.',
+    'Signing secret (shown only once)' => 'Secret de signature (affiché une seule fois)',
+    'You do NOT need to copy this for a regular web cron — it is already baked into the URL below. Only save it if you plan to sign trigger URLs from an external system.' => 'Vous n\'avez PAS besoin de le copier pour un cron web classique — il est déjà intégré dans l\'URL ci-dessous. Conservez-le uniquement si vous prévoyez de générer des URLs signées depuis un système externe.',
+    'Paste this URL in your hosting scheduled-tasks panel (Infomaniak, etc.). The URL is stable — leave the password field unchecked. To invalidate it, regenerate the secret below.' => 'Collez cette URL dans le panneau de tâches planifiées de votre hébergement (Infomaniak, etc.). L\'URL est stable — laissez la case « mot de passe » décochée. Pour l\'invalider, régénérez le secret ci-dessous.',
     'Regenerate secret' => 'Régénérer le secret',
     'Regenerate the secret? This invalidates the current URL.' => 'Régénérer le secret ? Cela invalide l\'URL actuelle.',
     'Save the task first to generate its trigger URL.' => 'Enregistrez la tâche pour générer son URL de déclenchement.',

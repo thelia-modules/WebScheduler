@@ -33,10 +33,10 @@
             </div>
             <div class="panel-body webscheduler-form">
                 {if $secret_revealed}
-                    <div class="alert alert-warning">
-                        <strong>{intl l="Secret is shown only once." d="webscheduler"}</strong><br>
-                        <code>{$secret_revealed|escape}</code><br>
-                        <small>{intl l="Store it safely. Anyone holding this secret can trigger the task." d="webscheduler"}</small>
+                    <div class="alert alert-info">
+                        <strong>{intl l="Signing secret (shown only once)" d="webscheduler"}</strong>
+                        <pre style="margin: 6px 0; padding: 6px 10px; background: #fff; border: 1px solid #ddd; border-radius: 3px;">{$secret_revealed|escape}</pre>
+                        <small>{intl l="You do NOT need to copy this for a regular web cron — it is already baked into the URL below. Only save it if you plan to sign trigger URLs from an external system." d="webscheduler"}</small>
                     </div>
                 {/if}
 
@@ -44,7 +44,7 @@
                     <div class="trigger-url-box">
                         <label>{intl l="Trigger URL" d="webscheduler"}</label>
                         <input type="text" readonly class="form-control" value="{$trigger_url|escape}" onclick="this.select();">
-                        <small class="text-muted">{intl l="Paste this URL in your hosting scheduled-tasks panel (Infomaniak, etc.). Each call generates its own signature at trigger time." d="webscheduler"}</small>
+                        <small class="text-muted">{intl l="Paste this URL in your hosting scheduled-tasks panel (Infomaniak, etc.). The URL is stable — leave the password field unchecked. To invalidate it, regenerate the secret below." d="webscheduler"}</small>
                     </div>
                 {/if}
 
