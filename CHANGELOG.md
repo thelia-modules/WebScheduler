@@ -5,6 +5,19 @@ All notable changes to this module are documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 and this module adheres to [Semantic Versioning](https://semver.org/).
 
+## [1.1.1] — 2026-04-20
+
+### Fixed
+- `CommandRegistry::all()` no longer crashes the admin page when another
+  module's command has a broken constructor (e.g. depends on
+  `allow_url_fopen` on a restricted hosting). Failing commands are logged
+  and skipped, the admin page keeps rendering.
+
+### Changed
+- Diagnostic page rewritten: capability details rendered as readable
+  key/value pairs instead of JSON. The "elected" strategy (the one picked
+  by `Auto`) is highlighted in green.
+
 ## [1.1.0] — 2026-04-20
 
 ### Changed

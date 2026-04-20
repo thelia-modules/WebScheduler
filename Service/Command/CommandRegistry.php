@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace WebScheduler\Service\Command;
 
 use Psr\Container\ContainerInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
@@ -13,6 +14,7 @@ final readonly class CommandRegistry
     public function __construct(
         #[Autowire(service: 'service_container')]
         private ContainerInterface $container,
+        private LoggerInterface $logger,
     ) {
     }
 
@@ -30,11 +32,20 @@ final readonly class CommandRegistry
         $seen = [];
 
         foreach ($ids as $id) {
-            if (!$this->container->has($id)) {
+            try {
+                if (!$this->container->has($id)) {
+                    continue;
+                }
+
+                $command = $this->container->get($id);
+            } catch (\Throwable $e) {
+                $this->logger->warning('WebScheduler: skipping non-instantiable command', [
+                    'id' => $id,
+                    'reason' => $e->getMessage(),
+                ]);
+
                 continue;
             }
-
-            $command = $this->container->get($id);
 
             if (!$command instanceof Command) {
                 continue;

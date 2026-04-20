@@ -76,6 +76,9 @@ return [
     'Priority' => 'Priorité',
     'Last check:' => 'Dernier contrôle :',
     'Refresh capabilities' => 'Rafraîchir les capacités',
+    'Elected (auto)' => 'Choisie (auto)',
+    'The green-highlighted strategy is the one picked by tasks set to \'Auto\'. A task can override this by selecting a specific strategy.' => 'La stratégie surlignée en vert est celle sélectionnée par les tâches en mode Auto. Chaque tâche peut forcer une autre stratégie.',
+    '(none)' => '(aucune)',
 
     // Strategy labels (ExecutionStrategyEnum::label())
     'Auto' => 'Auto',
