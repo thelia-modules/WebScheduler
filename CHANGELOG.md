@@ -5,6 +5,13 @@ All notable changes to this module are documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 and this module adheres to [Semantic Versioning](https://semver.org/).
 
+## [1.1.4] — 2026-04-20
+
+### Fixed
+- Aligned `Config/module.xml` and `composer.json` extra version with the
+  git tag. They were stuck at `1.0.0` while the released tags progressed
+  through 1.1.x, making Thelia's internal module version out of sync.
+
 ## [1.1.3] — 2026-04-20
 
 ### Fixed
