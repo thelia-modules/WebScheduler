@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database defaultIdMethod="native" name="TheliaMain"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="../../../../vendor/thelia/propel/resources/xsd/database.xsd">
+
+    <table name="web_scheduler_task" namespace="WebScheduler\Model">
+        <column name="id" type="INTEGER" primaryKey="true" required="true" autoIncrement="true"/>
+        <column name="slug" type="VARCHAR" size="64" required="true"/>
+        <column name="title" type="VARCHAR" size="255" required="true"/>
+        <column name="command_name" type="VARCHAR" size="255" required="true"/>
+        <column name="command_arguments" type="LONGVARCHAR"/>
+        <column name="strategy" type="VARCHAR" size="32" required="true" defaultValue="auto"/>
+        <column name="secret" type="VARCHAR" size="128" required="true"/>
+        <column name="enabled" type="BOOLEAN" required="true" defaultValue="true"/>
+        <column name="min_interval_seconds" type="INTEGER" required="true" defaultValue="0"/>
+        <column name="max_runtime_seconds" type="INTEGER" required="true" defaultValue="0"/>
+        <column name="ip_allowlist" type="LONGVARCHAR"/>
+        <column name="last_triggered_at" type="TIMESTAMP"/>
+        <unique name="uk_web_scheduler_task_slug">
+            <unique-column name="slug"/>
+        </unique>
+        <behavior name="timestampable"/>
+    </table>
+
+    <table name="web_scheduler_execution" namespace="WebScheduler\Model">
+        <column name="id" type="INTEGER" primaryKey="true" required="true" autoIncrement="true"/>
+        <column name="task_id" type="INTEGER" required="true"/>
+        <column name="triggered_at" type="TIMESTAMP" required="true"/>
+        <column name="started_at" type="TIMESTAMP"/>
+        <column name="finished_at" type="TIMESTAMP"/>
+        <column name="status" type="VARCHAR" size="32" required="true"/>
+        <column name="exit_code" type="INTEGER"/>
+        <column name="strategy_used" type="VARCHAR" size="32"/>
+        <column name="output" type="LONGVARCHAR"/>
+        <column name="trigger_ip" type="VARCHAR" size="45"/>
+        <foreign-key foreignTable="web_scheduler_task" name="fk_web_scheduler_execution_task_id" onDelete="CASCADE" onUpdate="RESTRICT">
+            <reference local="task_id" foreign="id"/>
+        </foreign-key>
+        <index name="idx_web_scheduler_execution_task_triggered">
+            <index-column name="task_id"/>
+            <index-column name="triggered_at"/>
+        </index>
+    </table>
+
+    <table name="web_scheduler_capability" namespace="WebScheduler\Model">
+        <column name="capability_key" type="VARCHAR" size="64" primaryKey="true" required="true"/>
+        <column name="available" type="BOOLEAN" required="true"/>
+        <column name="details" type="LONGVARCHAR"/>
+        <column name="checked_at" type="TIMESTAMP" required="true"/>
+    </table>
+
+    <external-schema filename="local/config/schema.xml" referenceOnly="true"/>
+</database>

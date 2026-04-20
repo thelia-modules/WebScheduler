@@ -1,0 +1,100 @@
+{extends file="admin-layout.tpl"}
+
+{block name="no-return-functions"}
+    {$admin_current_location = 'module'}
+{/block}
+
+{block name="check-resource"}admin.module{/block}
+{block name="check-access"}view{/block}
+{block name="check-module"}WebScheduler{/block}
+
+{block name="page-title"}{intl l="Tasks" d="webscheduler"}{/block}
+
+{block name="main-content"}
+    <div class="general-block-decorator">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">{intl l="Tasks" d="webscheduler"}</h4>
+            </div>
+            <div class="panel-body">
+                <div class="btn-toolbar" style="margin-bottom: 15px;">
+                    <a href="{url path="/admin/module/WebScheduler/tasks/create"}" class="btn btn-success">
+                        <i class="glyphicon glyphicon-plus"></i> {intl l="Create a task" d="webscheduler"}
+                    </a>
+                    <a href="{url path="/admin/module/WebScheduler/diagnostic"}" class="btn btn-default">
+                        <i class="glyphicon glyphicon-dashboard"></i> {intl l="Diagnostic" d="webscheduler"}
+                    </a>
+                    <a href="{url path="/admin/module/WebScheduler/executions"}" class="btn btn-default">
+                        <i class="glyphicon glyphicon-time"></i> {intl l="Executions" d="webscheduler"}
+                    </a>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-striped table-condensed">
+                        <thead>
+                            <tr>
+                                <th>{intl l="Title" d="webscheduler"}</th>
+                                <th>{intl l="Command" d="webscheduler"}</th>
+                                <th>{intl l="Strategy" d="webscheduler"}</th>
+                                <th>{intl l="Enabled" d="webscheduler"}</th>
+                                <th>{intl l="Last triggered" d="webscheduler"}</th>
+                                <th>{intl l="Trigger URL" d="webscheduler"}</th>
+                                <th style="width: 220px;">{intl l="Actions" d="webscheduler"}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {foreach $tasks as $entry}
+                                {assign var="task" value=$entry.task}
+                                <tr>
+                                    <td>{$task->getTitle()|escape}</td>
+                                    <td><code>{$task->getCommandName()|escape}</code>{if $task->getCommandArguments()} <small class="text-muted">{$task->getCommandArguments()|escape}</small>{/if}</td>
+                                    <td><span class="label label-default">{intl l=$task->getStrategy() d="webscheduler"}</span></td>
+                                    <td>
+                                        {if $task->getEnabled()}
+                                            <span class="label label-success">{intl l="Yes" d="webscheduler"}</span>
+                                        {else}
+                                            <span class="label label-warning">{intl l="No" d="webscheduler"}</span>
+                                        {/if}
+                                    </td>
+                                    <td>{if $task->getLastTriggeredAt()}{$task->getLastTriggeredAt()->format('Y-m-d H:i:s')}{else}&mdash;{/if}</td>
+                                    <td>
+                                        <button type="button" class="btn btn-xs btn-default" onclick="navigator.clipboard.writeText(this.dataset.url);">
+                                            <i class="glyphicon glyphicon-copy"></i> {intl l="Copy URL" d="webscheduler"}
+                                        </button>
+                                        <input type="text" readonly value="{$entry.trigger_url|escape}" data-url="{$entry.trigger_url|escape}" style="width: 100%; font-size: 10px; margin-top: 4px;" onclick="this.select();">
+                                    </td>
+                                    <td>
+                                        <a href="{url path="/admin/module/WebScheduler/tasks/{$task->getId()}"}" class="btn btn-xs btn-primary">
+                                            <i class="glyphicon glyphicon-pencil"></i>
+                                        </a>
+                                        <form action="{url path="/admin/module/WebScheduler/tasks/{$task->getId()}/trigger"}" method="POST" style="display:inline;">
+                                            <button type="submit" class="btn btn-xs btn-info" title="{intl l='Trigger now' d='webscheduler'}">
+                                                <i class="glyphicon glyphicon-play"></i>
+                                            </button>
+                                        </form>
+                                        <form action="{url path="/admin/module/WebScheduler/tasks/{$task->getId()}/toggle"}" method="POST" style="display:inline;">
+                                            <button type="submit" class="btn btn-xs btn-default">
+                                                <i class="glyphicon glyphicon-{if $task->getEnabled()}pause{else}play-circle{/if}"></i>
+                                            </button>
+                                        </form>
+                                        <form action="{url path="/admin/module/WebScheduler/tasks/{$task->getId()}/delete"}" method="POST" style="display:inline;" onsubmit="return confirm('{intl l='Delete this task?' d='webscheduler'}');">
+                                            <button type="submit" class="btn btn-xs btn-danger">
+                                                <i class="glyphicon glyphicon-trash"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            {foreachelse}
+                                <tr>
+                                    <td colspan="7" class="text-center text-muted">
+                                        {intl l="No task yet." d="webscheduler"}
+                                    </td>
+                                </tr>
+                            {/foreach}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{/block}

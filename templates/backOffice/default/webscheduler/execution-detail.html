@@ -1,0 +1,48 @@
+{extends file="admin-layout.tpl"}
+
+{block name="no-return-functions"}
+    {$admin_current_location = 'module'}
+{/block}
+
+{block name="check-resource"}admin.module{/block}
+{block name="check-access"}view{/block}
+{block name="check-module"}WebScheduler{/block}
+
+{block name="page-title"}{intl l="Execution" d="webscheduler"} #{$execution->getId()}{/block}
+
+{block name="main-content"}
+    <div class="general-block-decorator">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">{intl l="Execution" d="webscheduler"} #{$execution->getId()}</h4>
+            </div>
+            <div class="panel-body">
+                <dl class="dl-horizontal">
+                    <dt>{intl l="Task" d="webscheduler"}</dt>
+                    <dd>{if $execution->getWebSchedulerTask()}{$execution->getWebSchedulerTask()->getTitle()|escape} ({$execution->getWebSchedulerTask()->getCommandName()|escape}){/if}</dd>
+                    <dt>{intl l="Status" d="webscheduler"}</dt>
+                    <dd>{intl l=$execution->getStatus() d="webscheduler"}</dd>
+                    <dt>{intl l="Strategy" d="webscheduler"}</dt>
+                    <dd>{if $execution->getStrategyUsed()}{intl l=$execution->getStrategyUsed() d="webscheduler"}{/if}</dd>
+                    <dt>{intl l="Exit code" d="webscheduler"}</dt>
+                    <dd>{$execution->getExitCode()}</dd>
+                    <dt>{intl l="Triggered at" d="webscheduler"}</dt>
+                    <dd>{$execution->getTriggeredAt()->format('Y-m-d H:i:s')}</dd>
+                    <dt>{intl l="Started at" d="webscheduler"}</dt>
+                    <dd>{if $execution->getStartedAt()}{$execution->getStartedAt()->format('Y-m-d H:i:s')}{/if}</dd>
+                    <dt>{intl l="Finished at" d="webscheduler"}</dt>
+                    <dd>{if $execution->getFinishedAt()}{$execution->getFinishedAt()->format('Y-m-d H:i:s')}{/if}</dd>
+                    <dt>{intl l="Trigger IP" d="webscheduler"}</dt>
+                    <dd>{$execution->getTriggerIp()|escape}</dd>
+                </dl>
+
+                <h5>{intl l="Output" d="webscheduler"}</h5>
+                <pre style="max-height: 500px; overflow: auto;">{$execution->getOutput()|escape}</pre>
+
+                <a href="{url path="/admin/module/WebScheduler/executions"}" class="btn btn-default">
+                    <i class="glyphicon glyphicon-arrow-left"></i> {intl l="Back" d="webscheduler"}
+                </a>
+            </div>
+        </div>
+    </div>
+{/block}

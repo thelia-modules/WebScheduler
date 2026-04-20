@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<routes xmlns="http://symfony.com/schema/routing"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
+
+    <route id="webscheduler.trigger" path="/web-scheduler/run/{slug}" methods="GET|POST">
+        <default key="_controller">WebScheduler\Controller\Front\TriggerController::run</default>
+        <requirement key="slug">[a-f0-9]{32}</requirement>
+    </route>
+
+    <route id="webscheduler.admin" path="/admin/module/WebScheduler">
+        <default key="_controller">WebScheduler\Controller\Admin\TaskController::listAction</default>
+    </route>
+
+    <route id="webscheduler.admin.task.list" path="/admin/module/WebScheduler/tasks">
+        <default key="_controller">WebScheduler\Controller\Admin\TaskController::listAction</default>
+    </route>
+
+    <route id="webscheduler.admin.task.create" path="/admin/module/WebScheduler/tasks/create" methods="GET|POST">
+        <default key="_controller">WebScheduler\Controller\Admin\TaskController::createAction</default>
+    </route>
+
+    <route id="webscheduler.admin.task.update" path="/admin/module/WebScheduler/tasks/{id}" methods="GET|POST">
+        <default key="_controller">WebScheduler\Controller\Admin\TaskController::updateAction</default>
+        <requirement key="id">\d+</requirement>
+    </route>
+
+    <route id="webscheduler.admin.task.delete" path="/admin/module/WebScheduler/tasks/{id}/delete" methods="POST">
+        <default key="_controller">WebScheduler\Controller\Admin\TaskController::deleteAction</default>
+        <requirement key="id">\d+</requirement>
+    </route>
+
+    <route id="webscheduler.admin.task.toggle" path="/admin/module/WebScheduler/tasks/{id}/toggle" methods="POST">
+        <default key="_controller">WebScheduler\Controller\Admin\TaskController::toggleAction</default>
+        <requirement key="id">\d+</requirement>
+    </route>
+
+    <route id="webscheduler.admin.task.regenerate-secret" path="/admin/module/WebScheduler/tasks/{id}/regenerate-secret" methods="POST">
+        <default key="_controller">WebScheduler\Controller\Admin\TaskController::regenerateSecretAction</default>
+        <requirement key="id">\d+</requirement>
+    </route>
+
+    <route id="webscheduler.admin.task.trigger" path="/admin/module/WebScheduler/tasks/{id}/trigger" methods="POST">
+        <default key="_controller">WebScheduler\Controller\Admin\TaskController::manualTriggerAction</default>
+        <requirement key="id">\d+</requirement>
+    </route>
+
+    <route id="webscheduler.admin.execution.list" path="/admin/module/WebScheduler/executions">
+        <default key="_controller">WebScheduler\Controller\Admin\ExecutionController::listAction</default>
+    </route>
+
+    <route id="webscheduler.admin.execution.detail" path="/admin/module/WebScheduler/executions/{id}">
+        <default key="_controller">WebScheduler\Controller\Admin\ExecutionController::detailAction</default>
+        <requirement key="id">\d+</requirement>
+    </route>
+
+    <route id="webscheduler.admin.diagnostic" path="/admin/module/WebScheduler/diagnostic">
+        <default key="_controller">WebScheduler\Controller\Admin\DiagnosticController::indexAction</default>
+    </route>
+
+    <route id="webscheduler.admin.diagnostic.refresh" path="/admin/module/WebScheduler/diagnostic/refresh" methods="POST">
+        <default key="_controller">WebScheduler\Controller\Admin\DiagnosticController::refreshAction</default>
+    </route>
+
+</routes>

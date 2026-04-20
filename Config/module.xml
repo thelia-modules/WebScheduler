@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module xmlns="http://thelia.net/schema/dic/module"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://thelia.net/schema/dic/module http://thelia.net/schema/dic/module/module-2_2.xsd">
+    <fullnamespace>WebScheduler\WebScheduler</fullnamespace>
+    <descriptive locale="en_US">
+        <title>Web Scheduler</title>
+        <subtitle>Trigger Symfony Console commands from signed HTTP URLs</subtitle>
+        <description>Designed for shared hostings that only offer web-based scheduled tasks (Infomaniak, OVH mutualisé, ...). Adapts execution to the hosting capabilities: CLI fork when proc_open is allowed, FastCGI detached response when available, synchronous otherwise. Provides an admin UI to register tasks, view execution history and diagnose the hosting capabilities.</description>
+    </descriptive>
+    <descriptive locale="fr_FR">
+        <title>Web Scheduler</title>
+        <subtitle>Déclenche des commandes Symfony Console via des URLs HTTP signées</subtitle>
+        <description>Pensé pour les hébergements mutualisés qui ne proposent que des tâches planifiées web (Infomaniak, OVH mutualisé, etc.). Adapte l'exécution aux capacités de l'hébergeur : fork CLI si proc_open autorisé, réponse FastCGI détachée si disponible, synchrone sinon. Fournit une interface d'administration pour enregistrer les tâches, consulter l'historique et diagnostiquer l'hébergement.</description>
+    </descriptive>
+    <logo>logo.svg</logo>
+    <languages>
+        <language>en_US</language>
+        <language>fr_FR</language>
+    </languages>
+    <version>1.0.0</version>
+    <authors>
+        <author>
+            <name>Alexandre Noziere</name>
+            <email>anoziere@openstudio.fr</email>
+        </author>
+    </authors>
+    <type>classic</type>
+    <thelia>2.6.0</thelia>
+    <stability>prod</stability>
+    <mandatory>0</mandatory>
+    <hidden>0</hidden>
+</module>

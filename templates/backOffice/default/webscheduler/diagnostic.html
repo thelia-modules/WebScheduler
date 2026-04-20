@@ -1,0 +1,82 @@
+{extends file="admin-layout.tpl"}
+
+{block name="no-return-functions"}
+    {$admin_current_location = 'module'}
+{/block}
+
+{block name="check-resource"}admin.module{/block}
+{block name="check-access"}view{/block}
+{block name="check-module"}WebScheduler{/block}
+
+{block name="page-title"}{intl l="Diagnostic" d="webscheduler"}{/block}
+
+{block name="main-content"}
+    <div class="general-block-decorator">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">{intl l="Hosting capabilities" d="webscheduler"}</h4>
+            </div>
+            <div class="panel-body">
+                <p class="text-muted">{intl l="Last check:" d="webscheduler"} {$checked_at->format('Y-m-d H:i:s')}</p>
+
+                <table class="table table-condensed">
+                    <thead>
+                        <tr>
+                            <th>{intl l="Capability" d="webscheduler"}</th>
+                            <th>{intl l="Available" d="webscheduler"}</th>
+                            <th>{intl l="Details" d="webscheduler"}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {foreach $capabilities as $cap}
+                            <tr>
+                                <td><code>{$cap.key|escape}</code></td>
+                                <td>
+                                    {if $cap.available}
+                                        <span class="label label-success">{intl l="Available" d="webscheduler"}</span>
+                                    {else}
+                                        <span class="label label-danger">{intl l="Unavailable" d="webscheduler"}</span>
+                                    {/if}
+                                </td>
+                                <td><small><code>{$cap.details|json_encode|escape}</code></small></td>
+                            </tr>
+                        {/foreach}
+                    </tbody>
+                </table>
+
+                <h5>{intl l="Execution strategies" d="webscheduler"}</h5>
+                <table class="table table-condensed">
+                    <thead>
+                        <tr>
+                            <th>{intl l="Strategy" d="webscheduler"}</th>
+                            <th>{intl l="Priority" d="webscheduler"}</th>
+                            <th>{intl l="Supported" d="webscheduler"}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {foreach $strategies as $row}
+                            <tr>
+                                <td>{$row[0]->value|escape}</td>
+                                <td>{$row[2]}</td>
+                                <td>
+                                    {if $row[1]}
+                                        <span class="label label-success">{intl l="Yes" d="webscheduler"}</span>
+                                    {else}
+                                        <span class="label label-default">{intl l="No" d="webscheduler"}</span>
+                                    {/if}
+                                </td>
+                            </tr>
+                        {/foreach}
+                    </tbody>
+                </table>
+
+                <form action="{url path="/admin/module/WebScheduler/diagnostic/refresh"}" method="POST">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="glyphicon glyphicon-refresh"></i> {intl l="Refresh capabilities" d="webscheduler"}
+                    </button>
+                    <a href="{url path="/admin/module/WebScheduler"}" class="btn btn-default">{intl l="Back" d="webscheduler"}</a>
+                </form>
+            </div>
+        </div>
+    </div>
+{/block}

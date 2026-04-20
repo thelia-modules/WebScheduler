@@ -1,0 +1,35 @@
+{extends file="admin-layout.tpl"}
+
+{block name="no-return-functions"}
+    {$admin_current_location = 'module'}
+{/block}
+
+{block name="check-resource"}admin.module{/block}
+{block name="check-access"}view{/block}
+{block name="check-module"}WebScheduler{/block}
+
+{block name="page-title"}{intl l="Web Scheduler" d="webscheduler"}{/block}
+
+{block name="main-content"}
+    <div class="general-block-decorator">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">{intl l="Web Scheduler" d="webscheduler"}</h4>
+            </div>
+            <div class="panel-body">
+                <p>{intl l="Trigger Symfony Console commands via signed HTTP URLs. Adapts automatically to the hosting capabilities." d="webscheduler"}</p>
+                <div class="btn-toolbar">
+                    <a href="{url path="/admin/module/WebScheduler/tasks"}" class="btn btn-primary">
+                        <i class="glyphicon glyphicon-list"></i> {intl l="Tasks" d="webscheduler"}
+                    </a>
+                    <a href="{url path="/admin/module/WebScheduler/executions"}" class="btn btn-default">
+                        <i class="glyphicon glyphicon-time"></i> {intl l="Executions" d="webscheduler"}
+                    </a>
+                    <a href="{url path="/admin/module/WebScheduler/diagnostic"}" class="btn btn-default">
+                        <i class="glyphicon glyphicon-dashboard"></i> {intl l="Diagnostic" d="webscheduler"}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+{/block}
