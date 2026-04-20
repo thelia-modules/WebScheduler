@@ -24,6 +24,12 @@
 {/block}
 
 {block name="main-content"}
+    <ul class="breadcrumb">
+        <li><a href="{url path="/admin/home"}">{intl l="Home"}</a></li>
+        <li><a href="{url path="/admin/module/WebScheduler"}">{intl l="Web Scheduler" d="webscheduler"}</a></li>
+        <li class="active">{if $form_mode === 'create'}{intl l="Create a task" d="webscheduler"}{else}{$task->getTitle()|escape}{/if}</li>
+    </ul>
+
     <div class="general-block-decorator">
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -48,7 +54,7 @@
                     </div>
                 {/if}
 
-                {form name="webscheduler.task.form"}
+                {form name="webscheduler.task.form" data=$task_data}
                     <form action="" method="POST">
                         {form_hidden_fields form=$form}
 

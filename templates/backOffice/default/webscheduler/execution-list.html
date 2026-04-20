@@ -11,6 +11,12 @@
 {block name="page-title"}{intl l="Executions" d="webscheduler"}{/block}
 
 {block name="main-content"}
+    <ul class="breadcrumb">
+        <li><a href="{url path="/admin/home"}">{intl l="Home"}</a></li>
+        <li><a href="{url path="/admin/module/WebScheduler"}">{intl l="Web Scheduler" d="webscheduler"}</a></li>
+        <li class="active">{intl l="Executions" d="webscheduler"}</li>
+    </ul>
+
     <div class="general-block-decorator">
         <div class="panel panel-default">
             <div class="panel-heading">

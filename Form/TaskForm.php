@@ -45,7 +45,6 @@ class TaskForm extends BaseForm
             ->add('strategy', ChoiceType::class, [
                 'label' => $translator->trans('Strategy', [], $domain),
                 'choices' => $strategyChoices,
-                'data' => ExecutionStrategyEnum::AUTO->value,
             ])
             ->add('enabled', CheckboxType::class, [
                 'required' => false,
@@ -54,12 +53,10 @@ class TaskForm extends BaseForm
             ->add('min_interval_seconds', IntegerType::class, [
                 'label' => $translator->trans('Minimum interval (seconds)', [], $domain),
                 'constraints' => [new GreaterThanOrEqual(0)],
-                'data' => 0,
             ])
             ->add('max_runtime_seconds', IntegerType::class, [
                 'label' => $translator->trans('Maximum runtime (seconds)', [], $domain),
                 'constraints' => [new GreaterThanOrEqual(0)],
-                'data' => 0,
             ])
             ->add('ip_allowlist', TextareaType::class, [
                 'required' => false,

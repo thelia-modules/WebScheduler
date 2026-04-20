@@ -5,6 +5,21 @@ All notable changes to this module are documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 and this module adheres to [Semantic Versioning](https://semver.org/).
 
+## [1.1.3] — 2026-04-20
+
+### Fixed
+- Task edit form was rendering empty fields instead of the existing task
+  values. Root cause: the Smarty `{form}` tag rebuilds the form instance
+  from scratch, ignoring the controller-created one. The data is now
+  passed via the `data=` attribute of the Smarty tag, and the form
+  definition no longer forces hard-coded defaults on `strategy`,
+  `min_interval_seconds` and `max_runtime_seconds`.
+
+### Added
+- Breadcrumb navigation on the task form, execution list, execution
+  detail and diagnostic pages to make navigation back to the task list
+  a one-click action.
+
 ## [1.1.2] — 2026-04-20
 
 ### Changed

@@ -12,6 +12,8 @@ use Thelia\Controller\Admin\BaseAdminController;
 use Thelia\Core\Security\AccessManager;
 use Thelia\Core\Security\Resource\AdminResources;
 use Thelia\Tools\URL;
+use WebScheduler\Enum\ExecutionStrategyEnum;
+use WebScheduler\Model\WebSchedulerTask;
 use WebScheduler\Model\WebSchedulerTaskQuery;
 use WebScheduler\Service\Command\CommandRegistry;
 use WebScheduler\Service\Task\TaskPersister;
@@ -51,9 +53,9 @@ class TaskController extends BaseAdminController
             return $response;
         }
 
-        $form = $this->createForm('webscheduler.task.form');
-
         if ($request->isMethod('POST')) {
+            $form = $this->createForm('webscheduler.task.form');
+
             try {
                 $vform = $this->validateForm($form);
                 $task = $persister->create($vform->getData());
@@ -62,7 +64,7 @@ class TaskController extends BaseAdminController
                     sprintf('/admin/module/WebScheduler/tasks/%d?secret_revealed=1', $task->getId()),
                 ) ?? '/admin/module/WebScheduler');
             } catch (\Throwable $e) {
-                $this->setupFormErrorContext('webscheduler.task.form', $e->getMessage(), $form);
+                $this->setupFormErrorContext('webscheduler.task.form', $e->getMessage(), $form ?? null);
             }
         }
 
@@ -71,6 +73,7 @@ class TaskController extends BaseAdminController
             'task' => null,
             'secret_revealed' => null,
             'available_commands' => $commandRegistry->all(),
+            'task_data' => $this->defaultTaskData(),
         ]);
     }
 
@@ -91,18 +94,9 @@ class TaskController extends BaseAdminController
             return $this->errorPage($this->getTranslator()->trans('Task not found.', [], WebScheduler::DOMAIN_NAME), 404);
         }
 
-        $form = $this->createForm('webscheduler.task.form', FormType::class, [
-            'title' => $task->getTitle(),
-            'command_name' => $task->getCommandName(),
-            'command_arguments' => $task->getCommandArguments(),
-            'strategy' => $task->getStrategy(),
-            'enabled' => $task->getEnabled(),
-            'min_interval_seconds' => $task->getMinIntervalSeconds(),
-            'max_runtime_seconds' => $task->getMaxRuntimeSeconds(),
-            'ip_allowlist' => $this->ipAllowlistAsText($task->getIpAllowlist()),
-        ]);
-
         if ($request->isMethod('POST')) {
+            $form = $this->createForm('webscheduler.task.form');
+
             try {
                 $vform = $this->validateForm($form);
                 $persister->update($task, $vform->getData());
@@ -111,7 +105,7 @@ class TaskController extends BaseAdminController
                     sprintf('/admin/module/WebScheduler/tasks/%d', $task->getId()),
                 ) ?? '/admin/module/WebScheduler');
             } catch (\Throwable $e) {
-                $this->setupFormErrorContext('webscheduler.task.form', $e->getMessage(), $form);
+                $this->setupFormErrorContext('webscheduler.task.form', $e->getMessage(), $form ?? null);
             }
         }
 
@@ -121,6 +115,7 @@ class TaskController extends BaseAdminController
             'trigger_url' => $urlBuilder->build($task),
             'secret_revealed' => '1' === $request->query->get('secret_revealed') ? $task->getSecret() : null,
             'available_commands' => $commandRegistry->all(),
+            'task_data' => $this->taskDataFrom($task),
         ]);
     }
 
@@ -186,6 +181,40 @@ class TaskController extends BaseAdminController
         }
 
         return new RedirectResponse(URL::getInstance()?->absoluteUrl('/admin/module/WebScheduler') ?? '/admin/module/WebScheduler');
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function defaultTaskData(): array
+    {
+        return [
+            'title' => '',
+            'command_name' => '',
+            'command_arguments' => '',
+            'strategy' => ExecutionStrategyEnum::AUTO->value,
+            'enabled' => true,
+            'min_interval_seconds' => 0,
+            'max_runtime_seconds' => 0,
+            'ip_allowlist' => '',
+        ];
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function taskDataFrom(WebSchedulerTask $task): array
+    {
+        return [
+            'title' => $task->getTitle(),
+            'command_name' => $task->getCommandName(),
+            'command_arguments' => $task->getCommandArguments() ?? '',
+            'strategy' => $task->getStrategy(),
+            'enabled' => $task->getEnabled(),
+            'min_interval_seconds' => $task->getMinIntervalSeconds(),
+            'max_runtime_seconds' => $task->getMaxRuntimeSeconds(),
+            'ip_allowlist' => $this->ipAllowlistAsText($task->getIpAllowlist()),
+        ];
     }
 
     private function ipAllowlistAsText(?string $payload): string
