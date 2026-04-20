@@ -15,16 +15,12 @@ final readonly class TriggerUrlBuilder
     ) {
     }
 
-    public function build(WebSchedulerTask $task, ?int $timestamp = null): string
+    public function build(WebSchedulerTask $task): string
     {
-        $timestamp ??= time();
-        $signature = $this->signer->sign($task->getSlug(), $task->getSecret(), $timestamp);
-
         $path = sprintf(
-            '/web-scheduler/run/%s?ts=%d&sig=%s',
+            '/web-scheduler/run/%s?sig=%s',
             $task->getSlug(),
-            $timestamp,
-            $signature,
+            $this->signer->sign($task->getSlug(), $task->getSecret()),
         );
 
         return URL::getInstance()?->absoluteUrl($path) ?? $path;

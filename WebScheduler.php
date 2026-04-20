@@ -18,8 +18,6 @@ class WebScheduler extends BaseModule
 
     public const OUTPUT_MAX_BYTES = 65_536;
 
-    public const HMAC_TIME_WINDOW_SECONDS = 300;
-
     public function postActivation(?ConnectionInterface $con = null): void
     {
         if ($this->getConfigValue('is_initialized', false)) {

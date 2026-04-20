@@ -113,15 +113,15 @@ final readonly class CliForkStrategy implements ExecutionStrategyInterface
 
     private function outputDirectory(): string
     {
-        return \THELIA_CACHE_DIR.'webscheduler_output'.\DIRECTORY_SEPARATOR;
+        return \THELIA_ROOT.'var'.\DIRECTORY_SEPARATOR.'webscheduler'.\DIRECTORY_SEPARATOR.'output'.\DIRECTORY_SEPARATOR;
     }
 
     private function ensureOutputDirectory(): void
     {
         $dir = $this->outputDirectory();
 
-        if (!is_dir($dir)) {
-            @mkdir($dir, 0775, true);
+        if (!is_dir($dir) && !@mkdir($dir, 0775, true) && !is_dir($dir)) {
+            throw new \RuntimeException(sprintf('Cannot create output directory: %s', $dir));
         }
     }
 

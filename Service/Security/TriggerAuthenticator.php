@@ -28,14 +28,13 @@ final readonly class TriggerAuthenticator
             return AuthenticationResult::denied(ExecutionStatusEnum::DISABLED, 'Task is disabled.');
         }
 
-        $timestamp = (int) $request->query->get('ts', '0');
         $signature = (string) $request->query->get('sig', '');
 
-        if (0 === $timestamp || '' === $signature) {
+        if ('' === $signature) {
             return AuthenticationResult::denied(ExecutionStatusEnum::UNAUTHORIZED, 'Missing signature.');
         }
 
-        if (!$this->signer->verify($slug, $task->getSecret(), $timestamp, $signature)) {
+        if (!$this->signer->verify($slug, $task->getSecret(), $signature)) {
             return AuthenticationResult::denied(ExecutionStatusEnum::UNAUTHORIZED, 'Invalid signature.');
         }
 

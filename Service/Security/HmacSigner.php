@@ -4,23 +4,15 @@ declare(strict_types=1);
 
 namespace WebScheduler\Service\Security;
 
-use WebScheduler\WebScheduler;
-
 final readonly class HmacSigner
 {
-    public function sign(string $slug, string $secret, int $timestamp): string
+    public function sign(string $slug, string $secret): string
     {
-        return hash_hmac('sha256', $slug.'|'.$timestamp, $secret);
+        return hash_hmac('sha256', $slug, $secret);
     }
 
-    public function verify(string $slug, string $secret, int $timestamp, string $signature, ?int $now = null): bool
+    public function verify(string $slug, string $secret, string $signature): bool
     {
-        $now ??= time();
-
-        if (abs($now - $timestamp) > WebScheduler::HMAC_TIME_WINDOW_SECONDS) {
-            return false;
-        }
-
-        return hash_equals($this->sign($slug, $secret, $timestamp), $signature);
+        return hash_equals($this->sign($slug, $secret), $signature);
     }
 }

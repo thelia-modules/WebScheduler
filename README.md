@@ -23,8 +23,8 @@ one supported by the hosting — detected and cached at runtime.
 
 ## Features
 
-- HMAC-signed trigger URLs with a 5-minute validity window
-- Per-task opaque slug and secret (secret revealed once at creation)
+- Static HMAC-signed trigger URLs — paste once in your hosting's cron panel, never rotate it
+- Per-task opaque slug and secret (secret revealed once at creation); rotating the secret invalidates the URL
 - Per-task IP allowlist (CIDR), minimum interval rate limit, maximum runtime
 - Concurrency lock (`symfony/lock`, file-based) — overlapping calls are skipped
 - Execution history with status, exit code, strategy used and command output
@@ -59,25 +59,25 @@ On Infomaniak's "Planifier une tâche" panel:
 - URL: paste the full trigger URL (including `?ts=...&sig=...`)
 - Password: leave unchecked — the HMAC signature replaces URL basic-auth
 
-Infomaniak regenerates the call at each cron tick with the URL you provided.
-The signature window is 5 minutes, which is largely enough for any cron hop.
-
-If the URL's timestamp ever expires (for hostings that cache the URL for
-longer than 5 minutes), regenerate it from the task edit page — the module
-recomputes a fresh timestamp + signature every time the admin view is loaded.
+Paste the URL once and let Infomaniak call it on its schedule. The URL is
+stable — there is no timestamp or expiry. If the URL ever leaks and you want
+to invalidate it, hit **Regenerate secret** in the task form: the slug stays
+the same, the signature changes, every previously-copied URL stops working.
 
 ## Security model
 
-- Each task has a unique 32-hex slug embedded in the URL path.
-- The URL is signed: `sig = HMAC-SHA256(slug|timestamp, secret)`.
-- The timestamp must be within ±5 minutes of the server clock.
+- Each task has a unique 32-hex opaque slug embedded in the URL path.
+- The URL is signed: `sig = HMAC-SHA256(slug, secret)`. The signature is
+  static (no timestamp), so the URL is stable for web-cron usage.
 - Signature comparison is timing-safe (`hash_equals`).
 - Command arguments are **frozen** per task — nothing from the query string
   influences the executed command. No RCE surface.
-- Optional per-task IP allowlist (CIDR, one entry per line).
+- Optional per-task IP allowlist (CIDR, one entry per line) — the strongest
+  defence-in-depth layer if the URL leaks.
 - Optional per-task rate limit (`min_interval_seconds`).
 - Rejected requests always respond `202 Accepted` with a neutral body, to
   avoid leaking task existence.
+- To invalidate a leaked URL: **Regenerate secret** in the task form.
 
 ## Dev notes
 

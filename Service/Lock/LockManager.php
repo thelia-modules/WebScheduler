@@ -15,9 +15,7 @@ final class LockManager
 
     public function acquire(WebSchedulerTask $task): ?LockInterface
     {
-        $ttl = $task->getMaxRuntimeSeconds() > 0 ? (float) $task->getMaxRuntimeSeconds() : 3600.0;
-
-        $lock = $this->factory()->createLock('web_scheduler_task_'.$task->getId(), $ttl, false);
+        $lock = $this->factory()->createLock('web_scheduler_task_'.$task->getId());
 
         return $lock->acquire() ? $lock : null;
     }
@@ -29,12 +27,12 @@ final class LockManager
 
     private function lockDirectory(): string
     {
-        $dir = \THELIA_CACHE_DIR.'webscheduler_locks';
+        $dir = \THELIA_ROOT.'var'.\DIRECTORY_SEPARATOR.'webscheduler'.\DIRECTORY_SEPARATOR.'locks';
 
-        if (!is_dir($dir) && !@mkdir($dir, 0775, true) && !is_dir($dir)) {
-            return sys_get_temp_dir();
+        if (is_dir($dir) || @mkdir($dir, 0775, true) || is_dir($dir)) {
+            return $dir;
         }
 
-        return $dir;
+        return sys_get_temp_dir();
     }
 }
