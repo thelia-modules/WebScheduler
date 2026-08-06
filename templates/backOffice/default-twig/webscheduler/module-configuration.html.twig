@@ -1,0 +1,19 @@
+{# Rendered by WebScheduler\Hook\BackOfficeHook on the `module.configuration` hook,
+   i.e. inside the core /admin/module/WebScheduler page. Every URL is resolved by the
+   hook, so no routing happens here. #}
+<div class="card" data-testid="webscheduler-module-configuration">
+    <div class="card-body">
+        <p class="mb-3">{{ 'Trigger Symfony Console commands via signed HTTP URLs. Adapts automatically to the hosting capabilities.'|trans({}, 'webscheduler') }}</p>
+        <div class="d-flex flex-wrap gap-2">
+            <a href="{{ tasks_url }}" class="btn btn-primary" data-testid="webscheduler-config-tasks">
+                <i class="bi bi-list-task" aria-hidden="true"></i> {{ 'Tasks'|trans({}, 'webscheduler') }}
+            </a>
+            <a href="{{ executions_url }}" class="btn btn-outline-secondary">
+                <i class="bi bi-clock-history" aria-hidden="true"></i> {{ 'Executions'|trans({}, 'webscheduler') }}
+            </a>
+            <a href="{{ diagnostic_url }}" class="btn btn-outline-secondary">
+                <i class="bi bi-speedometer2" aria-hidden="true"></i> {{ 'Diagnostic'|trans({}, 'webscheduler') }}
+            </a>
+        </div>
+    </div>
+</div>

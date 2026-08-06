@@ -7,7 +7,7 @@ namespace WebScheduler;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ServicesConfigurator;
 use Symfony\Component\Finder\Finder;
-use Thelia\Install\Database;
+use Thelia\Core\Install\Database;
 use Thelia\Module\BaseModule;
 
 class WebScheduler extends BaseModule
@@ -65,9 +65,11 @@ class WebScheduler extends BaseModule
     {
         $servicesConfigurator->load(self::getModuleCode().'\\', __DIR__)
             ->exclude([
-                THELIA_MODULE_DIR.self::getModuleCode().'/I18n/*',
-                THELIA_MODULE_DIR.self::getModuleCode().'/Model/*',
-                THELIA_MODULE_DIR.self::getModuleCode().'/Enum/*',
+                __DIR__.'/I18n',
+                __DIR__.'/Config',
+                __DIR__.'/Model',
+                __DIR__.'/Tests',
+                __FILE__,
             ])
             ->autowire(true)
             ->autoconfigure(true);

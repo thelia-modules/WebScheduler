@@ -14,6 +14,8 @@ return [
     'Back' => 'Retour',
     'Cancel' => 'Annuler',
     'Save' => 'Enregistrer',
+    'Delete' => 'Supprimer',
+    'Pagination' => 'Pagination',
     'Actions' => 'Actions',
     'Details' => 'Détails',
     'Yes' => 'Oui',

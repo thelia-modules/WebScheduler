@@ -1,0 +1,94 @@
+{% extends '@WebSchedulerModule/backOffice/default-twig/webscheduler/_layout.html.twig' %}
+
+{% block ws_title %}{{ page_title }}{% endblock %}
+
+{% block ws_breadcrumb %}
+    <li class="breadcrumb-item"><a href="{{ path('webscheduler.admin.task.list') }}">{{ 'Tasks'|trans({}, 'webscheduler') }}</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{ page_title }}</li>
+{% endblock %}
+
+{% block ws_body %}
+    {% if secret_revealed %}
+        <div class="alert alert-info" data-testid="webscheduler-secret">
+            <h2 class="h6">{{ 'Signing secret (shown only once)'|trans({}, 'webscheduler') }}</h2>
+            <pre class="bg-body border rounded p-2 mb-2">{{ secret_revealed }}</pre>
+            <small>{{ 'You do NOT need to copy this for a regular web cron — it is already baked into the URL below. Only save it if you plan to sign trigger URLs from an external system.'|trans({}, 'webscheduler') }}</small>
+        </div>
+    {% endif %}
+
+    {% if trigger_url %}
+        <div class="card mb-3 border-primary border-start border-4">
+            <div class="card-body">
+                <label class="form-label fw-semibold" for="ws-trigger-url">{{ 'Trigger URL'|trans({}, 'webscheduler') }}</label>
+                <input type="text" id="ws-trigger-url" readonly class="form-control font-monospace"
+                       value="{{ trigger_url }}" onclick="this.select();" data-testid="webscheduler-trigger-url">
+                <small class="text-muted">{{ 'Paste this URL in your hosting scheduled-tasks panel (Infomaniak, etc.). The URL is stable — leave the password field unchecked. To invalidate it, regenerate the secret below.'|trans({}, 'webscheduler') }}</small>
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="card">
+        <div class="card-body">
+            {% form_theme form with bo_form_themes only %}
+            {{ form_start(form, { action: form_action, method: 'post', attr: { 'data-testid': 'webscheduler-task-form' } }) }}
+                <div class="row">
+                    <div class="col-md-6">{{ form_row(form.title) }}</div>
+                    <div class="col-md-6">
+                        {{ form_row(form.command_name, { attr: { list: 'webscheduler-commands', placeholder: 'app:module:command' } }) }}
+                        <datalist id="webscheduler-commands">
+                            {% for command in available_commands %}
+                                <option value="{{ command.name }}">{{ command.description }}</option>
+                            {% endfor %}
+                        </datalist>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-8">
+                        {{ form_row(form.command_arguments, { attr: { placeholder: '--incremental --limit=100' } }) }}
+                        <small class="text-muted d-block mb-3">{{ 'CLI-style arguments, space separated. Quote values that contain spaces.'|trans({}, 'webscheduler') }}</small>
+                    </div>
+                    <div class="col-md-4">
+                        {{ form_row(form.strategy) }}
+                        <small class="text-muted d-block mb-3">{{ 'Auto picks the best strategy supported by the hosting.'|trans({}, 'webscheduler') }}</small>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        {{ form_row(form.min_interval_seconds, { attr: { min: 0 } }) }}
+                        <small class="text-muted d-block mb-3">{{ 'Minimum seconds between two triggers. 0 disables rate limiting.'|trans({}, 'webscheduler') }}</small>
+                    </div>
+                    <div class="col-md-4">
+                        {{ form_row(form.max_runtime_seconds, { attr: { min: 0 } }) }}
+                        <small class="text-muted d-block mb-3">{{ 'Hard timeout for external process execution. 0 means no limit.'|trans({}, 'webscheduler') }}</small>
+                    </div>
+                    <div class="col-md-4 pt-md-4">{{ form_row(form.enabled) }}</div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        {{ form_row(form.ip_allowlist, { attr: { rows: 3, placeholder: '192.168.1.0/24' } }) }}
+                        <small class="text-muted d-block mb-3">{{ 'One CIDR or IP per line. Empty = any IP allowed.'|trans({}, 'webscheduler') }}</small>
+                    </div>
+                </div>
+
+                <div class="d-flex flex-wrap justify-content-end gap-2 border-top pt-3 mt-2">
+                    <a href="{{ path('webscheduler.admin.task.list') }}" class="btn btn-outline-secondary">{{ 'Cancel'|trans({}, 'webscheduler') }}</a>
+                    <button type="submit" class="btn btn-primary" data-testid="webscheduler-task-save">
+                        <i class="bi bi-check2" aria-hidden="true"></i> {{ 'Save'|trans({}, 'webscheduler') }}
+                    </button>
+                </div>
+            {{ form_end(form) }}
+
+            {% if regenerate_secret_url %}
+                <form action="{{ regenerate_secret_url }}" method="post" class="border-top pt-3 mt-3"
+                      onsubmit="return confirm({{ 'Regenerate the secret? This invalidates the current URL.'|trans({}, 'webscheduler')|json_encode|raw }});">
+                    <button type="submit" class="btn btn-sm btn-outline-warning">
+                        <i class="bi bi-arrow-repeat" aria-hidden="true"></i> {{ 'Regenerate secret'|trans({}, 'webscheduler') }}
+                    </button>
+                </form>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
