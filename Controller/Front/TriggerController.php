@@ -11,10 +11,12 @@ use Thelia\Controller\Front\BaseFrontController;
 use WebScheduler\Enum\ExecutionStatusEnum;
 use WebScheduler\Service\Security\TriggerAuthenticator;
 use WebScheduler\Service\Task\ExecutionRecorder;
+use Symfony\Component\Routing\Attribute\Route;
 use WebScheduler\Service\Task\TaskRunner;
 
 class TriggerController extends BaseFrontController
 {
+    #[Route('/web-scheduler/run/{slug}', name: 'webscheduler.trigger', requirements: ['slug' => '[a-f0-9]{32}'], methods: ['GET', 'POST'])]
     public function run(
         string $slug,
         Request $request,

@@ -1,0 +1,45 @@
+{# Shared shell for every WebScheduler back-office screen.
+
+   Factors out the base extension, the breadcrumb trail and the module tool-bar so
+   each screen only declares its own title and body. Child templates override:
+     - `ws_title`        page title (plain text, already translated)
+     - `ws_breadcrumb`   extra breadcrumb items (<li> elements) after "Web Scheduler"
+     - `ws_body`         page content
+     - `ws_toolbar`      buttons rendered on the right of the page header #}
+{% extends '@BackOfficeDefaultTwig/base.html.twig' %}
+
+{% block title %}{% block ws_title %}{{ 'Web Scheduler'|trans({}, 'webscheduler') }}{% endblock %}{% endblock %}
+{% block body_testid %}webscheduler-page{% endblock %}
+
+{% block breadcrumb %}
+    <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ path('admin.home') }}">{{ 'Home'|trans }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ path('webscheduler.admin') }}">{{ 'Web Scheduler'|trans({}, 'webscheduler') }}</a></li>
+            {% block ws_breadcrumb %}{% endblock %}
+        </ol>
+    </nav>
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+        <div class="bo-page-header d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3">
+            <h1 class="h4 mb-0">{{ block('ws_title') }}</h1>
+            <div class="d-flex flex-wrap align-items-center gap-2">
+                {% block ws_toolbar %}
+                    <a href="{{ path('webscheduler.admin.task.list') }}" class="btn btn-sm btn-outline-primary">
+                        <i class="bi bi-list-task" aria-hidden="true"></i> {{ 'Tasks'|trans({}, 'webscheduler') }}
+                    </a>
+                    <a href="{{ path('webscheduler.admin.execution.list') }}" class="btn btn-sm btn-outline-secondary">
+                        <i class="bi bi-clock-history" aria-hidden="true"></i> {{ 'Executions'|trans({}, 'webscheduler') }}
+                    </a>
+                    <a href="{{ path('webscheduler.admin.diagnostic') }}" class="btn btn-sm btn-outline-secondary">
+                        <i class="bi bi-speedometer2" aria-hidden="true"></i> {{ 'Diagnostic'|trans({}, 'webscheduler') }}
+                    </a>
+                {% endblock %}
+            </div>
+        </div>
+
+        {% block ws_body %}{% endblock %}
+    </div>
+{% endblock %}
