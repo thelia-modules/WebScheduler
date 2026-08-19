@@ -36,7 +36,7 @@
         "installer-name": "WebScheduler",
         "thelia": {
             "name": "WebScheduler",
-            "version": "1.1.4"
+            "version": "2.0.0"
         }
     }
 }

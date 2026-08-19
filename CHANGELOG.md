@@ -5,6 +5,18 @@ All notable changes to this module are documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 and this module adheres to [Semantic Versioning](https://semver.org/).
 
+## [2.0.0] — 2026-08-19
+
+### Changed
+- **Breaking: this release targets Thelia 3.** The back-office runs on the
+  `default-twig` theme; the Smarty templates of the 1.x line are gone. Stay
+  on 1.1.4 (branch `thelia2`) for a Thelia 2 shop.
+- The task form is resolved by class instead of the `webscheduler.task.form`
+  name declared in `Config/config.xml`: Thelia 3 auto-discovers forms, so the
+  declaration was redundant.
+- Admin routes are declared with `#[Route]` attributes; `Config/routing.xml`
+  is removed.
+
 ## [1.1.4] — 2026-04-20
 
 ### Fixed
