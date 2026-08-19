@@ -28,6 +28,7 @@ one supported by the hosting — detected and cached at runtime.
 - Per-task IP allowlist (CIDR), minimum interval rate limit, maximum runtime
 - Concurrency lock (`symfony/lock`, file-based) — overlapping calls are skipped
 - Execution history with status, exit code, strategy used and command output
+- Back-office screens are Twig templates for the `default-twig` theme
 - Back-office diagnostic panel — shows which capabilities the hosting provides
   and which strategies are supported
 - Back-office CRUD for tasks, manual "trigger now" button, secret regeneration
@@ -82,7 +83,7 @@ the same, the signature changes, every previously-copied URL stops working.
 ## Dev notes
 
 - Namespace: `WebScheduler\*` (PSR-4)
-- Requires PHP 8.3+, Thelia 2.6+, Symfony 6.4 or 7.x
+- Requires PHP 8.3+, Thelia 3.0+, Symfony 7.4 (Thelia 2.6 support lives on the `thelia2` branch, 1.x releases)
 - Strategies are services tagged `webscheduler.execution_strategy`, loaded
   into `StrategyResolver` via `#[AutowireIterator]`
 - Lock store: `FlockStore` rooted at `THELIA_CACHE_DIR/webscheduler_locks`
