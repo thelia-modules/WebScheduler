@@ -1,0 +1,118 @@
+{% extends '@WebSchedulerModule/backOffice/default-twig/webscheduler/_layout.html.twig' %}
+
+{% block ws_title %}{{ 'Diagnostic'|trans({}, 'webscheduler') }}{% endblock %}
+
+{% block ws_breadcrumb %}
+    <li class="breadcrumb-item active" aria-current="page">{{ 'Diagnostic'|trans({}, 'webscheduler') }}</li>
+{% endblock %}
+
+{% block ws_body %}
+    <div class="card mb-3" data-testid="webscheduler-capabilities">
+        <div class="card-header bg-body-tertiary d-flex flex-wrap justify-content-between align-items-center gap-2">
+            <h2 class="h6 mb-0">{{ 'Hosting capabilities'|trans({}, 'webscheduler') }}</h2>
+            <small class="text-muted">
+                <i class="bi bi-clock" aria-hidden="true"></i>
+                {{ 'Last check:'|trans({}, 'webscheduler') }} {{ checked_at }}
+            </small>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-striped align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th scope="col" style="width: 240px;">{{ 'Capability'|trans({}, 'webscheduler') }}</th>
+                        <th scope="col" style="width: 150px;">{{ 'Available'|trans({}, 'webscheduler') }}</th>
+                        <th scope="col">{{ 'Details'|trans({}, 'webscheduler') }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for capability in capabilities %}
+                        <tr>
+                            <td><code>{{ capability.key }}</code></td>
+                            <td>
+                                {% if capability.available %}
+                                    <span class="badge text-bg-success"><i class="bi bi-check-lg" aria-hidden="true"></i> {{ 'Available'|trans({}, 'webscheduler') }}</span>
+                                {% else %}
+                                    <span class="badge text-bg-danger"><i class="bi bi-x-lg" aria-hidden="true"></i> {{ 'Unavailable'|trans({}, 'webscheduler') }}</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if capability.details is not empty %}
+                                    <dl class="row small mb-0">
+                                        {% for detailKey, detailValue in capability.details %}
+                                            <dt class="col-sm-4 fw-normal text-muted">{{ detailKey }}</dt>
+                                            <dd class="col-sm-8 font-monospace text-break">
+                                                {% if detailValue is iterable %}
+                                                    {% if detailValue is empty %}
+                                                        <em>{{ '(none)'|trans({}, 'webscheduler') }}</em>
+                                                    {% else %}
+                                                        {% for item in detailValue %}
+                                                            <span class="badge text-bg-secondary me-1">{{ item }}</span>
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                {% else %}
+                                                    {{ detailValue }}
+                                                {% endif %}
+                                            </dd>
+                                        {% endfor %}
+                                    </dl>
+                                {% else %}
+                                    <span class="text-muted">—</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="card mb-3" data-testid="webscheduler-strategies">
+        <div class="card-header bg-body-tertiary">
+            <h2 class="h6 mb-0">{{ 'Execution strategies'|trans({}, 'webscheduler') }}</h2>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-striped align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th scope="col" style="width: 320px;">{{ 'Strategy'|trans({}, 'webscheduler') }}</th>
+                        <th scope="col" style="width: 130px;">{{ 'Priority'|trans({}, 'webscheduler') }}</th>
+                        <th scope="col">{{ 'Supported'|trans({}, 'webscheduler') }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for strategy in strategies %}
+                        <tr{% if strategy.elected %} class="table-success"{% endif %}>
+                            <td>
+                                <strong>{{ strategy.label }}</strong>
+                                <code class="ms-2">{{ strategy.key }}</code>
+                                {% if strategy.elected %}
+                                    <span class="badge rounded-pill text-bg-success ms-2">{{ 'Elected (auto)'|trans({}, 'webscheduler') }}</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ strategy.priority }}</td>
+                            <td>
+                                {% if strategy.supported %}
+                                    <span class="badge text-bg-success"><i class="bi bi-check-lg" aria-hidden="true"></i> {{ 'Yes'|trans({}, 'webscheduler') }}</span>
+                                {% else %}
+                                    <span class="badge text-bg-secondary">{{ 'No'|trans({}, 'webscheduler') }}</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="alert alert-info">
+        <i class="bi bi-info-circle" aria-hidden="true"></i>
+        {{ "The green-highlighted strategy is the one picked by tasks set to 'Auto'. A task can override this by selecting a specific strategy."|trans({}, 'webscheduler') }}
+    </div>
+
+    <form action="{{ path('webscheduler.admin.diagnostic.refresh') }}" method="post" class="d-flex gap-2">
+        <button type="submit" class="btn btn-primary" data-testid="webscheduler-refresh-capabilities">
+            <i class="bi bi-arrow-repeat" aria-hidden="true"></i> {{ 'Refresh capabilities'|trans({}, 'webscheduler') }}
+        </button>
+        <a href="{{ path('webscheduler.admin.task.list') }}" class="btn btn-outline-secondary">{{ 'Back'|trans({}, 'webscheduler') }}</a>
+    </form>
+{% endblock %}

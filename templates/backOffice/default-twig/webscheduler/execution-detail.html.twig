@@ -1,0 +1,48 @@
+{% extends '@WebSchedulerModule/backOffice/default-twig/webscheduler/_layout.html.twig' %}
+
+{% block ws_title %}{{ 'Execution'|trans({}, 'webscheduler') }} #{{ execution.id }}{% endblock %}
+
+{% block ws_breadcrumb %}
+    <li class="breadcrumb-item"><a href="{{ path('webscheduler.admin.execution.list') }}">{{ 'Executions'|trans({}, 'webscheduler') }}</a></li>
+    <li class="breadcrumb-item active" aria-current="page">#{{ execution.id }}</li>
+{% endblock %}
+
+{% block ws_body %}
+    <div class="card mb-3" data-testid="webscheduler-execution-detail">
+        <div class="card-body">
+            <dl class="row mb-0">
+                <dt class="col-sm-3">{{ 'Task'|trans({}, 'webscheduler') }}</dt>
+                <dd class="col-sm-9">{{ execution.task ?: '—' }}</dd>
+                <dt class="col-sm-3">{{ 'Status'|trans({}, 'webscheduler') }}</dt>
+                <dd class="col-sm-9"><span class="badge text-bg-{{ execution.status_variant }}">{{ execution.status_label }}</span></dd>
+                <dt class="col-sm-3">{{ 'Strategy'|trans({}, 'webscheduler') }}</dt>
+                <dd class="col-sm-9">{{ execution.strategy ?: '—' }}</dd>
+                <dt class="col-sm-3">{{ 'Exit code'|trans({}, 'webscheduler') }}</dt>
+                <dd class="col-sm-9">{{ execution.exit_code is null ? '—' : execution.exit_code }}</dd>
+                <dt class="col-sm-3">{{ 'Triggered at'|trans({}, 'webscheduler') }}</dt>
+                <dd class="col-sm-9">{{ execution.triggered_at ?: '—' }}</dd>
+                <dt class="col-sm-3">{{ 'Started at'|trans({}, 'webscheduler') }}</dt>
+                <dd class="col-sm-9">{{ execution.started_at ?: '—' }}</dd>
+                <dt class="col-sm-3">{{ 'Finished at'|trans({}, 'webscheduler') }}</dt>
+                <dd class="col-sm-9">{{ execution.finished_at ?: '—' }}</dd>
+                <dt class="col-sm-3">{{ 'Trigger IP'|trans({}, 'webscheduler') }}</dt>
+                <dd class="col-sm-9">{{ execution.trigger_ip ?: '—' }}</dd>
+            </dl>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header bg-body-tertiary">
+            <h2 class="h6 mb-0">{{ 'Output'|trans({}, 'webscheduler') }}</h2>
+        </div>
+        <div class="card-body">
+            <pre class="mb-0" style="max-height: 500px; overflow: auto;">{{ execution.output }}</pre>
+        </div>
+    </div>
+
+    <div class="mt-3">
+        <a href="{{ path('webscheduler.admin.execution.list') }}" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left" aria-hidden="true"></i> {{ 'Back'|trans({}, 'webscheduler') }}
+        </a>
+    </div>
+{% endblock %}
