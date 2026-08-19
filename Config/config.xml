@@ -9,8 +9,4 @@
         <loop name="webscheduler.execution" class="WebScheduler\Loop\ExecutionLoop" />
     </loops>
 
-    <forms>
-        <form name="webscheduler.task.form" class="WebScheduler\Form\TaskForm" />
-    </forms>
-
 </config>

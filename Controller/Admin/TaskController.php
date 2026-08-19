@@ -14,6 +14,7 @@ use Thelia\Controller\Admin\BaseAdminController;
 use Thelia\Core\Security\AccessManager;
 use Thelia\Core\Security\Resource\AdminResources;
 use WebScheduler\Enum\ExecutionStrategyEnum;
+use WebScheduler\Form\TaskForm;
 use WebScheduler\Model\WebSchedulerTask;
 use WebScheduler\Model\WebSchedulerTaskQuery;
 use WebScheduler\Service\Command\CommandRegistry;
@@ -61,7 +62,7 @@ class TaskController extends BaseAdminController
             return $response;
         }
 
-        $form = $this->createForm('webscheduler.task.form', FormType::class, $this->defaultTaskData());
+        $form = $this->createForm(TaskForm::class, FormType::class, $this->defaultTaskData());
 
         if ($request->isMethod('POST')) {
             try {
@@ -73,7 +74,7 @@ class TaskController extends BaseAdminController
                     ['id' => $task->getId(), 'secret_revealed' => 1],
                 ));
             } catch (\Throwable $e) {
-                $this->setupFormErrorContext('webscheduler.task.form', $e->getMessage(), $form);
+                $this->setupFormErrorContext(TaskForm::class, $e->getMessage(), $form);
             }
         }
 
@@ -107,7 +108,7 @@ class TaskController extends BaseAdminController
             return $this->errorPage($this->getTranslator()->trans('Task not found.', [], WebScheduler::DOMAIN_NAME), 404);
         }
 
-        $form = $this->createForm('webscheduler.task.form', FormType::class, $this->taskDataFrom($task));
+        $form = $this->createForm(TaskForm::class, FormType::class, $this->taskDataFrom($task));
 
         if ($request->isMethod('POST')) {
             try {
@@ -116,7 +117,7 @@ class TaskController extends BaseAdminController
 
                 return new RedirectResponse($urlGenerator->generate('webscheduler.admin.task.update', ['id' => $task->getId()]));
             } catch (\Throwable $e) {
-                $this->setupFormErrorContext('webscheduler.task.form', $e->getMessage(), $form);
+                $this->setupFormErrorContext(TaskForm::class, $e->getMessage(), $form);
             }
         }
 
